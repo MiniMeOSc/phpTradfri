@@ -1,0 +1,114 @@
+<!doctype html>
+<html ng-app="tradfriApp">
+	<head>
+		<title>Tradfri</title>
+		<style type="text/css">
+			.loader {
+				display: inline-block;
+				border: 5px solid lightgray;
+				border-top: 5px solid #3498db; /* Blue */
+				border-radius: 50%;
+				width: 10px;
+				height: 10px;
+				animation: spin 1.5s linear infinite;
+				vertical-align: middle;
+			}
+
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+			
+			.button-on {
+				color: #fff;
+				background-color: #5cb85c;			
+			}
+			.button-off {
+				color: #fff;
+				background-color: #d9534f;
+			}
+			.button-scene-on {
+				color: #fff;
+				background-color: #5bc0de;
+			}
+		</style>
+
+
+		<!-- AngularJS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+		
+		<script type="text/javascript">
+			var app = angular.module('tradfriApp', []);
+			app.controller('tradfriController', function($scope, $http) {
+				var refreshingCount = 0;
+				$scope.refresh = function() {
+					function refreshingFinished() {
+						refreshingCount--;
+						if(refreshingCount == 0) {
+							$scope.refreshing = false;
+						}
+					}
+					$scope.refreshing = true;
+					
+					refreshingCount++;
+					$http.get('list.php').then(function(response) {
+						$scope.groups = response.data.groups;
+						$scope.devices = response.data.devices;
+					}).finally(refreshingFinished);
+				};
+				$scope.refresh();
+
+				$scope.send = function(id, type, action, value) {
+					var data = {
+						id: id,
+						type: type,
+						action: action,
+						value: value
+					};
+					$http.post('action.php', data)
+					.then(function(response) {
+						$scope.refresh();
+					});
+				};
+
+				$scope.scene = function(id, value) {
+					$scope.send(id, 'scene', null, parseInt(value, 10));
+				}
+					
+				$scope.getDevices = function(ids) {
+					var devices = $scope.devices.filter(function(element) {
+						return ids.indexOf(element.id) > -1;
+					});
+					return devices;
+				};
+			});
+		</script>
+	</head>
+	<body>
+		<div ng-controller="tradfriController">
+			<div><button ng-click="refresh()">Refresh</button><div class="loader" ng-show="refreshing"></div></div>
+			<ul>
+				<li ng-repeat="g in groups">
+					{{g.name}}
+					<button ng-click="send(g.id, 'group', 'power', 1)" ng-class="{ 'button-on': g.status == 1 }">An</button> 
+					<button ng-click="send(g.id, 'group', 'power', 0)" ng-class="{ 'button-off': g.status == 0 }">Aus</button>
+					<button ng-repeat="s in g.scenes" ng-click="scene(g.id, s.id)" ng-class="{ 'button-scene-on': s.status == 1 }">{{s.name}}</button>
+					<input type="range" min="0" max="255" ng-model="g.brightness" ng-change="send(g.id, 'group', 'dim', g.brightness)" />
+					<ul>
+						<li ng-repeat="d in getDevices(g.devices)">
+							{{d.name}}
+							<span ng-if="d.type == 'light' && d.status != null">						
+								<button ng-click="send(d.id, 'device', 'power', 1)" ng-class="{ 'button-on': d.status == 1 }">An</button> 
+								<button ng-click="send(d.id, 'device', 'power', 0)" ng-class="{ 'button-off': d.status == 0 }">Aus</button> 
+								<input type="range" min="0" max="255" ng-model="d.brightness" ng-change="send(d.id, 'device', 'dim', d.brightness)" />
+							</span>
+							<span ng-if="d.type != 'light'">
+								{{d.battery}}% battery
+							</span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
