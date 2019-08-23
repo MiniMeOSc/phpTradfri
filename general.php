@@ -27,16 +27,13 @@ class tradfri
 		fclose($output[STDERR]);
 		$rc = proc_close($process);
 
-		//$result = json_decode(strstr($stdout,'{"'), true);
-		$result = json_encode($stdout, true);
-
 		return $stdout;
-		//return $result;
 
 		}
 
 	function getDetails($path){
 
+		//Get Device Details and cut Output from coap Client
 		return json_decode(strstr($this->query($path), '{"'), true);
 
 		}
