@@ -10,6 +10,11 @@ define('NAME', 9001);
 define('LIGHT', 3311);
 define('ONOFF', 5850);//3311/0/5850 = device on/off
 define('DIMMER', 5851);//3311/0/5851 = device brightness
+define('COLORHEX', 5706); //3311/0/5706
+define('COLORX', 5709); //3311/0/5709 => don't use 5706 and 5709/5710 at the same time!
+define('COLORY', 5710);
+define('COLORTEMP', 5711);
+define('TRANSITION', 5712); //Fade Time
 define('INSTANCE_ID', 9003);
 define('HS_ACCESSORY_LINK', 9018);
 define('HS_LINK', 15002);
