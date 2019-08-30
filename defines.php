@@ -5,6 +5,7 @@
 define('DEVICES', 15001);
 define('GROUPS', 15004);
 define('SCENE', 15005);
+define('GATEWAY', 15011);
 define('NAME', 9001);
 define('LIGHT', 3311);
 define('ONOFF', 5850);//3311/0/5850 = device on/off
@@ -18,6 +19,7 @@ define('GATEWAY', 15011);
 define('CLIENT_IDENTITY_PROPOSED', 9090);
 define('AUTH_PATH', 9063);
 define('NEW_PSK_BY_GW', 9091);
+define('GATEWAY_NTP', 9023);
 define('VERSION', 9029);
 define('DEVICE_OBJECT_INSTANCE', 3);
 define('DEVICE_BATTERY_LEVEL', 9);
