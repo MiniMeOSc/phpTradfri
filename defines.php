@@ -5,10 +5,16 @@
 define('DEVICES', 15001);
 define('GROUPS', 15004);
 define('SCENE', 15005);
+define('GATEWAY', 15011);
 define('NAME', 9001);
 define('LIGHT', 3311);
 define('ONOFF', 5850);//3311/0/5850 = device on/off
 define('DIMMER', 5851);//3311/0/5851 = device brightness
+define('COLORHEX', 5706); //3311/0/5706
+define('COLORX', 5709); //3311/0/5709 => don't use 5706 and 5709/5710 at the same time!
+define('COLORY', 5710);
+define('COLORTEMP', 5711);
+define('TRANSITION', 5712); //Fade Time
 define('INSTANCE_ID', 9003);
 define('HS_ACCESSORY_LINK', 9018);
 define('HS_LINK', 15002);
@@ -18,6 +24,7 @@ define('GATEWAY', 15011);
 define('CLIENT_IDENTITY_PROPOSED', 9090);
 define('AUTH_PATH', 9063);
 define('NEW_PSK_BY_GW', 9091);
+define('GATEWAY_NTP', 9023);
 define('VERSION', 9029);
 define('DEVICE_OBJECT_INSTANCE', 3);
 define('DEVICE_BATTERY_LEVEL', 9);
